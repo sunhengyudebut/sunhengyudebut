@@ -77,10 +77,67 @@
             .fade-in.visible {
                 opacity: 1;
             }
+            /* 导航提示按钮 */
+            .nav-prompt {
+                @apply fixed bottom-8 right-8 bg-primary text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg z-40 cursor-pointer animate-pulse;
+            }
+        }
+
+        /* 深色模式适配 */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #121212;
+                color: #e0e0e0;
+            }
+            
+            .bg-light {
+                background-color: #1e1e1e !important;
+            }
+            
+            .bg-white {
+                background-color: #2d2d2d !important;
+            }
+            
+            .text-dark {
+                color: #e0e0e0 !important;
+            }
+            
+            .text-secondary {
+                color: #f0f0f0 !important;
+            }
+            
+            .profile-card {
+                background-color: #2d2d2d !important;
+                border-color: #ff5252 !important;
+            }
+            
+            .card-effect {
+                background-color: #2d2d2d !important;
+                border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            }
+            
+            /* 深色模式下的导航栏 */
+            #navbar {
+                background-color: rgba(18, 18, 18, 0.8) !important;
+            }
+            
+            #mobile-menu {
+                background-color: #1e1e1e !important;
+            }
+            
+            /* 页脚深色模式 */
+            footer.bg-secondary {
+                background-color: #121212 !important;
+            }
         }
     </style>
 </head>
 <body class="bg-light text-dark font-sans">
+    <!-- 导航提示按钮 - 仅移动端显示 -->
+    <div id="nav-prompt" class="nav-prompt md:hidden">
+        <i class="fa fa-arrow-down text-2xl"></i>
+    </div>
+
     <!-- 图片模态框 -->
     <div id="image-modal" class="modal">
         <span class="close-modal" onclick="closeModal()">&times;</span>
@@ -127,13 +184,13 @@
         <div class="absolute inset-0 z-0">
             <!-- 首页使用公式照1的图片，移动端使用专门的移动端图片 -->
             <div class="absolute inset-0 overflow-hidden">
-                <img src="https://youke1.picui.cn/s1/2025/08/07/68945a5f370c5.jpg" alt="孙亨裕公式照1" title="公式照1拼接副本.JPG" class="w-full h-[100vh] object-cover md:block hidden" style="object-position: top;">
-                <img src="https://youke1.picui.cn/s1/2025/08/07/6894a0bcaa19e.jpg" alt="公式照1拼接移动端.JPG" title="公式照1拼接移动端.JPG" class="w-full h-[100vh] object-cover md:hidden block">
+                <img src="https://youke1.picui.cn/s1/2025/08/07/68945a5f370c5.jpg" alt="孙亨裕公式照1" title="公式照1拼接副本.JPG" class="w-full h-[100vh] object-cover md:block hidden hero-image" style="object-position: top;">
+                <img src="https://youke1.picui.cn/s1/2025/08/07/6894a0bcaa19e.jpg" alt="公式照1拼接移动端.JPG" title="公式照1拼接移动端.JPG" class="w-full h-[100vh] object-cover md:hidden block hero-image">
             </div>
-            <!-- 阴影遮盖层 - 移动端三秒后淡入 -->
+            <!-- 阴影遮盖层 - 移动端点击后淡入 -->
             <div class="absolute inset-0 bg-gradient-to-b from-black/60 to-black/80 fade-in md:opacity-100" id="hero-overlay"></div>
         </div>
-        <!-- 文字内容 - 移动端三秒后淡入 -->
+        <!-- 文字内容 - 移动端点击后淡入 -->
         <div class="container mx-auto px-4 z-10 text-center fade-in md:opacity-100" id="hero-content">
             <h1 class="text-[clamp(2rem,8vw,5rem)] font-extrabold text-white mb-2 text-shadow-lg leading-tight">
                 <span class="block text-primary">쑨헝위</span>
@@ -151,7 +208,7 @@
                 투표하러 가기 <i class="fa fa-arrow-right ml-2"></i>
             </a>
         </div>
-        <!-- 向下箭头 - 移动端三秒后淡入 -->
+        <!-- 向下箭头 - 移动端点击后淡入 -->
         <div class="absolute bottom-8 left-0 right-0 text-center z-10 fade-in md:opacity-100" id="hero-arrow">
             <a href="#profile" class="text-white animate-bounce inline-block">
                 <i class="fa fa-chevron-down text-2xl"></i>
@@ -589,78 +646,84 @@
     </div>
 
     <!-- 音乐控制按钮 -->
-    <button id="music-control" class="fixed top-20 right-6 bg-primary/80 hover:bg-primary text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg z-50 transition-all duration-300">
-        <i class="fa fa-volume-up"></i>
-    </button>
-
     <script>
-        // 页面加载完成后执行
+        // 深色模式检测和适配
+        function checkDarkMode() {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                // 除首页公式照外，其他图片增加亮度滤镜
+                document.querySelectorAll('img:not(.hero-image)').forEach(img => {
+                    img.style.filter = 'brightness(1.1)';
+                });
+                // 确保首页公式照没有滤镜，保持原样
+                document.querySelectorAll('.hero-image').forEach(img => {
+                    img.style.filter = 'none';
+                });
+            } else {
+                // 非深色模式下移除所有滤镜
+                document.querySelectorAll('img').forEach(img => {
+                    img.style.filter = 'none';
+                });
+            }
+        }
+        
+        // 初始化检查深色模式
+        checkDarkMode();
+        // 监听深色模式变化
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', checkDarkMode);
+
+        // 移动端元素淡入控制
         document.addEventListener('DOMContentLoaded', function() {
-            // 检查是否为移动设备
+            // 获取需要淡入的元素
+            const fadeElements = document.querySelectorAll('#hero-overlay, #hero-content, #hero-arrow, #navbar-title');
+            const navPrompt = document.getElementById('nav-prompt');
+            
+            // 移动端检测
             const isMobile = window.innerWidth < 768;
             
-            // 如果是移动设备，3秒后淡入元素
             if (isMobile) {
-                setTimeout(function() {
-                    document.getElementById('hero-overlay').classList.add('visible');
-                    document.getElementById('hero-content').classList.add('visible');
-                    document.getElementById('hero-arrow').classList.add('visible');
-                    document.getElementById('navbar-title').classList.add('visible');
-                }, 3000); // 3秒延迟
+                // 移动端默认隐藏元素
+                fadeElements.forEach(el => {
+                    el.classList.remove('md:opacity-100');
+                    el.classList.add('opacity-0');
+                });
+                
+                // 点击提示按钮淡入元素
+                navPrompt.addEventListener('click', function() {
+                    fadeElements.forEach(el => {
+                        el.classList.add('visible');
+                    });
+                    navPrompt.classList.add('opacity-0');
+                    setTimeout(() => {
+                        navPrompt.classList.add('hidden');
+                    }, 300);
+                });
+                
+                // 滑动时淡入元素
+                let hasFaded = false;
+                window.addEventListener('scroll', function() {
+                    if (!hasFaded && window.scrollY > 10) {
+                        fadeElements.forEach(el => {
+                            el.classList.add('visible');
+                        });
+                        navPrompt.classList.add('opacity-0');
+                        setTimeout(() => {
+                            navPrompt.classList.add('hidden');
+                        }, 300);
+                        hasFaded = true;
+                    }
+                });
             } else {
-                // 桌面设备立即显示
-                document.getElementById('hero-overlay').classList.add('visible');
-                document.getElementById('hero-content').classList.add('visible');
-                document.getElementById('hero-arrow').classList.add('visible');
-                document.getElementById('navbar-title').classList.add('visible');
+                // 非移动端隐藏提示按钮
+                navPrompt.classList.add('hidden');
+                // 非移动端直接显示元素
+                fadeElements.forEach(el => {
+                    el.classList.add('visible');
+                });
             }
             
             // 导航栏滚动效果
             const navbar = document.getElementById('navbar');
-            const backToTop = document.getElementById('back-to-top');
-            
-            // 页面区域引用
-            const sections = {
-                hero: document.getElementById('hero-section'),
-                profile: document.getElementById('profile'),
-                photos: document.getElementById('photos'),
-                videos: document.getElementById('videos'),
-                social: document.getElementById('social'),
-                vote: document.getElementById('vote')
-            };
-
-            // 移动端菜单切换
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-            
-            mobileMenuButton.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
-            
-            // 图片模态框功能
-            const modal = document.getElementById('image-modal');
-            const modalImage = document.getElementById('modal-image');
-            
-            window.openModal = function(imageUrl) {
-                modalImage.src = imageUrl;
-                modal.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            }
-            
-            window.closeModal = function() {
-                modal.classList.remove('active');
-                document.body.style.overflow = 'auto';
-            }
-            
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    closeModal();
-                }
-            });
-            
-            // 滚动效果
-            window.addEventListener('scroll', () => {
-                // 导航栏背景变化
+            window.addEventListener('scroll', function() {
                 if (window.scrollY > 50) {
                     navbar.classList.add('bg-secondary', 'bg-opacity-95', 'shadow-lg');
                     navbar.classList.remove('bg-transparent');
@@ -668,34 +731,61 @@
                     navbar.classList.remove('bg-secondary', 'bg-opacity-95', 'shadow-lg');
                     navbar.classList.add('bg-transparent');
                 }
-                
-                // 返回顶部按钮显示/隐藏
+            });
+            
+            // 移动端菜单切换
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            mobileMenuButton.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // 返回顶部按钮
+            const backToTopButton = document.getElementById('back-to-top');
+            
+            window.addEventListener('scroll', function() {
                 if (window.scrollY > 300) {
-                    backToTop.classList.remove('opacity-0', 'invisible');
-                    backToTop.classList.add('opacity-100', 'visible');
+                    backToTopButton.classList.remove('opacity-0', 'invisible');
+                    backToTopButton.classList.add('opacity-100', 'visible');
                 } else {
-                    backToTop.classList.add('opacity-0', 'invisible');
-                    backToTop.classList.remove('opacity-100', 'visible');
+                    backToTopButton.classList.add('opacity-0', 'invisible');
+                    backToTopButton.classList.remove('opacity-100', 'visible');
                 }
             });
             
-            // 返回顶部功能
-            backToTop.addEventListener('click', () => {
+            backToTopButton.addEventListener('click', function() {
                 window.scrollTo({
                     top: 0,
                     behavior: 'smooth'
                 });
             });
             
-            // 平滑滚动到锚点
+            // 图片模态框
+            const modal = document.getElementById('image-modal');
+            const modalImage = document.getElementById('modal-image');
+            
+            window.openModal = function(src) {
+                modalImage.src = src;
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            };
+            
+            window.closeModal = function() {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            };
+            
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+            
+            // 平滑滚动
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
+                anchor.addEventListener('click', function(e) {
                     e.preventDefault();
-                    
-                    // 关闭移动端菜单（如果打开）
-                    if (!mobileMenu.classList.contains('hidden')) {
-                        mobileMenu.classList.add('hidden');
-                    }
                     
                     const targetId = this.getAttribute('href');
                     if (targetId === '#') return;
@@ -705,28 +795,15 @@
                         targetElement.scrollIntoView({
                             behavior: 'smooth'
                         });
+                        
+                        // 关闭移动菜单（如果打开）
+                        if (!mobileMenu.classList.contains('hidden')) {
+                            mobileMenu.classList.add('hidden');
+                        }
                     }
                 });
             });
-            
-            // 音乐控制
-            const musicControl = document.getElementById('music-control');
-            const bgMusic = document.getElementById('bg-music');
-            let isPlaying = true;
-            
-            musicControl.addEventListener('click', () => {
-                isPlaying = !isPlaying;
-                
-                if (isPlaying) {
-                    bgMusic.src = bgMusic.src.replace('autoplay=0', 'autoplay=1');
-                    musicControl.innerHTML = '<i class="fa fa-volume-up"></i>';
-                } else {
-                    bgMusic.src = bgMusic.src.replace('autoplay=1', 'autoplay=0');
-                    musicControl.innerHTML = '<i class="fa fa-volume-off"></i>';
-                }
-            });
         });
     </script>
-
 </body>
 </html>
