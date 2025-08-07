@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<!-- 隐形水印 -->
+<div style="position: absolute; top: -9999px; left: -9999px; opacity: 0; pointer-events: none;">@-SSSSSXCINDY</div>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>쑨헝위 (孙亨裕) 소개합니다!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#EA3D4D',
+                        secondary: '#1A1A1A',
+                        light: '#F9F9F9',
+                        dark: '#333333'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-shadow {
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            }
+            .text-shadow-lg {
+                text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+            }
+            .bg-blur {
+                backdrop-filter: blur(8px);
+            }
+            .hover-scale {
+                @apply hover:scale-105 transition-all duration-300;
+            }
+            .card-effect {
+                @apply bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300;
+            }
+            .profile-card {
+                @apply bg-white rounded-xl shadow-md p-6 mb-6 border-l-4 border-primary;
+            }
+            /* 图片模态框 */
+            .modal {
+                @apply fixed inset-0 bg-black/80 z-50 flex items-center justify-center opacity-0 invisible transition-all duration-300;
+            }
+            .modal.active {
+                @apply opacity-100 visible;
+            }
+            .modal-content {
+                @apply max-w-4xl max-h-[90vh] p-4;
+            }
+            .modal-img {
+                @apply max-w-full max-h-[85vh] object-contain;
+            }
+            .close-modal {
+                @apply absolute top-4 right-4 text-white text-3xl cursor-pointer hover:text-primary transition-colors;
+            }
+            /* 个人简介图片容器样式 */
+            .profile-img-container {
+                @apply relative overflow-hidden;
+                padding-top: 140%; /* 保持与其他图片相同的高宽比 */
+            }
+            .profile-img {
+                @apply absolute top-0 left-0 w-full h-full object-cover;
+            }
+            /* 淡入动画 */
+            .fade-in {
+                opacity: 0;
+                transition: opacity 1s ease-in-out;
+            }
+            .fade-in.visible {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body class="bg-light text-dark font-sans">
+    <!-- 图片模态框 -->
+    <div id="image-modal" class="modal">
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+        <div class="modal-content">
+            <img id="modal-image" class="modal-img" src="" alt="大图预览">
+        </div>
+    </div>
+
+    <!-- 导航栏 -->
+    <header id="navbar" class="fixed w-full z-50 transition-all duration-300 bg-transparent">
+        <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center">
+                <!-- 公式照11副本 -->
+                <img src="https://youke1.picui.cn/s1/2025/08/07/68945b02ba184.jpg" alt="公式照11副本" class="h-8 mr-2">
+                <a href="#" class="text-white text-2xl font-bold text-shadow-lg fade-in" id="navbar-title">
+                    <span class="text-primary">U</span> | 쑨헝위
+                </a>
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#profile" class="text-white hover:text-primary transition-colors font-medium text-shadow">프로필</a>
+                <a href="#photos" class="text-white hover:text-primary transition-colors font-medium text-shadow">사진</a>
+                <a href="#videos" class="text-white hover:text-primary transition-colors font-medium text-shadow">동영상</a>
+                <a href="#social" class="text-white hover:text-primary transition-colors font-medium text-shadow">커뮤니티</a>
+                <a href="#vote" class="text-white hover:text-primary transition-colors font-medium text-shadow">투표</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden text-white text-2xl">
+                <i class="fa fa-bars"></i>
+            </button>
+        </nav>
+        <!-- 移动端菜单 -->
+        <div id="mobile-menu" class="md:hidden hidden bg-secondary bg-opacity-95 bg-blur">
+            <div class="container mx-auto px-4 py-4 flex flex-col space-y-4">
+                <a href="#profile" class="text-white hover:text-primary transition-colors py-2 border-b border-gray-700">프로필</a>
+                <a href="#photos" class="text-white hover:text-primary transition-colors py-2 border-b border-gray-700">사진</a>
+                <a href="#videos" class="text-white hover:text-primary transition-colors py-2 border-b border-gray-700">동영상</a>
+                <a href="#social" class="text-white hover:text-primary transition-colors py-2 border-b border-gray-700">커뮤니티</a>
+                <a href="#vote" class="text-white hover:text-primary transition-colors py-2">투표</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 英雄区域 -->
+    <section class="relative h-screen flex items-center justify-center overflow-hidden" id="hero-section">
+        <div class="absolute inset-0 z-0">
+            <!-- 首页使用公式照1的图片，移动端使用专门的移动端图片 -->
+            <div class="absolute inset-0 overflow-hidden">
+                <img src="https://youke1.picui.cn/s1/2025/08/07/68945a5f370c5.jpg" alt="孙亨裕公式照1" title="公式照1拼接副本.JPG" class="w-full h-[100vh] object-cover md:block hidden" style="object-position: top;">
+                <img src="https://youke1.picui.cn/s1/2025/08/07/6894a0bcaa19e.jpg" alt="公式照1拼接移动端.JPG" title="公式照1拼接移动端.JPG" class="w-full h-[100vh] object-cover md:hidden block">
+            </div>
+            <!-- 阴影遮盖层 - 移动端三秒后淡入 -->
+            <div class="absolute inset-0 bg-gradient-to-b from-black/60 to-black/80 fade-in md:opacity-100" id="hero-overlay"></div>
+        </div>
+        <!-- 文字内容 - 移动端三秒后淡入 -->
+        <div class="container mx-auto px-4 z-10 text-center fade-in md:opacity-100" id="hero-content">
+            <h1 class="text-[clamp(2rem,8vw,5rem)] font-extrabold text-white mb-2 text-shadow-lg leading-tight">
+                <span class="block text-primary">쑨헝위</span>
+                <span class="text-[clamp(1.2rem,5vw,3rem)] text-gray-200">孙亨裕</span>
+            </h1>
+            <p class="text-[clamp(0.9rem,3vw,1.5rem)] text-gray-200 max-w-2xl mx-auto mb-4 text-shadow">
+                <span class="block">보이즈 II 플래닛 출연자</span>
+            </p>
+            <!-- 添加"请为我应援"的中韩字样 -->
+            <p class="text-[clamp(1rem,4vw,2rem)] text-white font-bold mb-8 text-shadow-lg">
+                <span class="block">응원해주세요!</span>
+                <span class="text-sm md:text-xl">请为我应援!</span>
+            </p>
+            <a href="#vote" class="inline-block bg-primary hover:bg-primary/90 text-white font-bold py-3 px-8 rounded-full text-[clamp(0.9rem,3vw,1.2rem)] shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
+                투표하러 가기 <i class="fa fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+        <!-- 向下箭头 - 移动端三秒后淡入 -->
+        <div class="absolute bottom-8 left-0 right-0 text-center z-10 fade-in md:opacity-100" id="hero-arrow">
+            <a href="#profile" class="text-white animate-bounce inline-block">
+                <i class="fa fa-chevron-down text-2xl"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- 个人简介 - 调整公式照12高度与其他图片一致 -->
+    <section id="profile" class="py-20 bg-white relative">
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="text-[clamp(1.5rem,5vw,3rem)] font-bold text-secondary mb-2">
+                    <span class="text-primary">#</span> 프로필
+                </h2>
+                <h3 class="text-[clamp(0.9rem,2vw,1.2rem)] text-gray-500">个人简介 | Profile</h3>
+                <div class="w-24 h-1 bg-primary mx-auto mt-4"></div>
+            </div>
+
+            <div class="max-w-4xl mx-auto">
+                <!-- 3张图片并排，保持相同高度和各自比例，移动端也保持三列 -->
+                <div class="grid grid-cols-3 gap-4 mb-10">
+                    <!-- 自我介绍韩文 -->
+                    <div class="card-effect hover-scale cursor-pointer" onclick="openModal('https://youke1.picui.cn/s1/2025/08/07/68941bf7d2a38.png')">
+                        <div class="profile-img-container">
+                            <img src="https://youke1.picui.cn/s1/2025/08/07/68941bf7d2a38.png" alt="孙亨裕自我介绍韩文" title="自我介绍韩文.PNG" class="profile-img">
+                        </div>
+                    </div>
+                    
+                    <!-- 公式照12 - 调整为与其他图片相同高度，保持原图比例 -->
+                    <div class="card-effect hover-scale cursor-pointer" onclick="openModal('https://youke1.picui.cn/s1/2025/08/07/68942a39de64f.jpg')">
+                        <div class="profile-img-container">
+                            <img src="https://youke1.picui.cn/s1/2025/08/07/68942a39de64f.jpg" alt="孙亨裕公式照12" title="公式照12.JPG" class="profile-img" style="object-position: center;">
+                        </div>
+                    </div>
+                    
+                    <!-- 自我介绍中文 -->
+                    <div class="card-effect hover-scale cursor-pointer" onclick="openModal('https://youke1.picui.cn/s1/2025/08/07/68941bf84442c.png')">
+                        <div class="profile-img-container">
+                            <img src="https://youke1.picui.cn/s1/2025/08/07/68941bf84442c.png" alt="孙亨裕自我介绍中文" title="自我介绍中文.PNG" class="profile-img">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 图片来源标注 -->
+                <p class="text-xs text-gray-400 mb-10 text-right italic">사진 출처: mnetboysplanet</p>
+                
+                <!-- 文字内容在下 -->
+                <div class="space-y-8">
+<!-- 基本信息卡片 -->
+<div class="profile-card">
+    <h3 class="text-[clamp(1.2rem,4vw,2rem)] font-bold text-secondary mb-4">기본 정보 | 基本信息</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-6">
+        <div>
+            <h4 class="text-[clamp(0.9rem,3vw,1.2rem)] font-semibold text-secondary mb-2 flex items-center">
+                <i class="fa fa-user-circle text-primary mr-2"></i> 예명 | 艺名
+            </h4>
+            <p class="text-[clamp(1rem,3vw,1.5rem)] font-bold text-primary">쑨헝위</p>
+        </div>
+        <div>
+            <h4 class="text-[clamp(0.9rem,3vw,1.2rem)] font-semibold text-secondary mb-2 flex items-center">
+                <i class="fa fa-id-card text-primary mr-2"></i> 본명 | 姓名
+            </h4>
+            <p class="text-[clamp(1rem,3vw,1.5rem)] font-bold text-primary">손형유</p>
+            <p class="text-gray-600">孙亨裕 (Sūn Hēng Yù)</p>
+        </div>
+        <div>
+            <h4 class="text-[clamp(0.9rem,3vw,1.2rem)] font-semibold text-secondary mb-2 flex items-center">
+                <i class="fa fa-tag text-primary mr-2"></i> 별명 | 别名
+            </h4>
+            <p class="text-[clamp(1rem,3vw,1.5rem)] font-bold text-primary">U</p>
+        </div>
+        <div>
+            <h4 class="text-[clamp(0.9rem,3vw,1.2rem)] font-semibold text-secondary mb-2 flex items-center">
+                <i class="fa fa-heart text-primary mr-2"></i> MBTI
+            </h4>
+            <p class="text-[clamp(1rem,3vw,1.5rem)] font-bold text-primary">INFP</p>
+        </div>
+        <div>
+            <h4 class="text-[clamp(0.9rem,3vw,1.2rem)] font-semibold text-secondary mb-2 flex items-center">
+                <i class="fa fa-birthday-cake text-primary mr-2"></i> 생년월일 | 生日
+            </h4>
+            <p class="text-[clamp(1rem,3vw,1.5rem)] font-bold text-primary">2001.06.22</p>
+        </div>
+        <div>
+            <h4 class="text-[clamp(0.9rem,3vw,1.2rem)] font-semibold text-secondary mb-2 flex items-center">
+                <i class="fa fa-arrows-v text-primary mr-2"></i> 키 | 身高
+            </h4>
+            <p class="text-[clamp(1rem,3vw,1.5rem)] font-bold text-primary">177cm</p>
+        </div>
+        <div>
+            <h4 class="text-[clamp(0.9rem,3vw,1.2rem)] font-semibold text-secondary mb-2 flex items-center">
+                <i class="fa fa-home text-primary mr-2"></i> 고향 | 家乡
+            </h4>
+            <p class="text-[clamp(1rem,3vw,1.5rem)] font-bold text-primary">중국 지린성 연변</p>
+            <p class="text-gray-600">中国吉林延边</p>
+        </div>
+        <div>
+            <h4 class="text-[clamp(0.9rem,3vw,1.2rem)] font-semibold text-secondary mb-2 flex items-center">
+                <i class="fa fa-users text-primary mr-2"></i> 그룹 경력 | 前所属组合
+            </h4>
+            <p class="text-[clamp(1rem,3vw,1.5rem)] font-bold text-primary">BLANK2Y , DV.OL</p>
+        </div>
+    </div>
+</div>
+
+                    <!-- 兴趣和个人技卡片 -->
+                    <div class="profile-card">
+                        <h3 class="text-[clamp(1.2rem,4vw,2rem)] font-bold text-secondary mb-4">취미와 개인기 | 兴趣和个人技</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="text-[clamp(0.9rem,3vw,1.2rem)] font-semibold text-secondary mb-2 flex items-center">
+                                    <i class="fa fa-heart text-primary mr-2"></i> 취미 | 兴趣
+                                </h4>
+                                <p class="text-[clamp(1rem,3vw,1.5rem)] font-bold text-primary">볼링, 노래 부르기, 게임하기</p>
+                                <p class="text-gray-600">打保龄球、唱歌、打游戏</p>
+                            </div>
+                            <div>
+                                <h4 class="text-[clamp(0.9rem,3vw,1.2rem)] font-semibold text-secondary mb-2 flex items-center">
+                                    <i class="fa fa-star text-primary mr-2"></i> 개인기 | 个人技
+                                </h4>
+                                <p class="text-[clamp(1rem,3vw,1.5rem)] font-bold text-primary">요리, 한국어, 중국어, 일본어, 기타, 건반, 색소폰 연주</p>
+                                <p class="text-gray-600">烹饪、会中日韩三国语言、吉他、键盘、萨克斯风演奏</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 喜欢的事物卡片 -->
+                    <div class="profile-card">
+                        <h3 class="text-[clamp(1.2rem,4vw,2rem)] font-bold text-secondary mb-4">좋아하는 것 | 最喜欢的事物</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="text-[clamp(0.9rem,3vw,1.2rem)] font-semibold text-secondary mb-2 flex items-center">
+                                    <i class="fa fa-music text-primary mr-2"></i> 가장 좋아하는 가수 | 最喜欢的艺人
+                                </h4>
+                                <p class="text-[clamp(1rem,3vw,1.5rem)] font-bold text-primary">샤이니 - 태민</p>
+                                <p class="text-gray-600">SHINee-TAEMIN（李泰民）</p>
+                            </div>
+                            <div>
+                                <h4 class="text-[clamp(0.9rem,3vw,1.2rem)] font-semibold text-secondary mb-2 flex items-center">
+                                    <i class="fa fa-music text-primary mr-2"></i> 가장 좋아하는 노래 | 最喜欢的歌曲
+                                </h4>
+                                <p class="text-[clamp(1rem,3vw,1.5rem)] font-bold text-primary">샤이니 - I want you</p>
+                                <p class="text-gray-600">SHINee - I want you</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 公式照 -->
+    <section id="photos" class="py-20 bg-gray-50 relative">
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="text-[clamp(1.5rem,5vw,3rem)] font-bold text-secondary mb-2">
+                    <span class="text-primary">#</span> 공식 사진
+                </h2>
+                <h3 class="text-[clamp(0.9rem,2vw,1.2rem)] text-gray-500">公式照 | Official Photos</h3>
+                <div class="w-24 h-1 bg-primary mx-auto mt-4"></div>
+            </div>
+
+            <!-- 添加的内容：为了出道，我会燃尽自己的! -->
+            <div class="text-center mb-10">
+                <p class="text-[clamp(1rem,3vw,1.8rem)] font-bold text-secondary mb-2">
+                    "데뷔를 위해 제 온몸을 불사르겠습니다!"
+                </p>
+                <p class="text-[clamp(0.9rem,2vw,1.4rem)] text-gray-600">
+                    "为了出道，我会燃尽自己的!"
+                </p>
+            </div>
+
+            <!-- 六张图片，移动端也保持三列布局 -->
+            <div class="grid grid-cols-3 gap-4">
+                <!-- 使用网盘图片，可点击查看原图 -->
+                <div class="card-effect hover-scale cursor-pointer" onclick="openModal('https://youke1.picui.cn/s1/2025/08/07/6894198797464.jpg')">
+                    <img src="https://youke1.picui.cn/s1/2025/08/07/6894198797464.jpg" alt="孙亨裕公式照2" title="公式照2.JPG" class="w-full h-full object-cover">
+                </div>
+                <div class="card-effect hover-scale cursor-pointer" onclick="openModal('https://youke1.picui.cn/s1/2025/08/07/6894198823504.jpg')">
+                    <img src="https://youke1.picui.cn/s1/2025/08/07/6894198823504.jpg" alt="孙亨裕公式照3" title="公式照3.JPG" class="w-full h-full object-cover">
+                </div>
+                <div class="card-effect hover-scale cursor-pointer" onclick="openModal('https://youke1.picui.cn/s1/2025/08/07/6894198887d2a.jpg')">
+                    <img src="https://youke1.picui.cn/s1/2025/08/07/6894198887d2a.jpg" alt="孙亨裕公式照4" title="公式照4.JPG" class="w-full h-full object-cover">
+                </div>
+                <div class="card-effect hover-scale cursor-pointer" onclick="openModal('https://youke1.picui.cn/s1/2025/08/07/68941b1508c8d.jpg')">
+                    <img src="https://youke1.picui.cn/s1/2025/08/07/68941b1508c8d.jpg" alt="孙亨裕公式照8" title="公式照8.JPG" class="w-full h-full object-cover">
+                </div>
+                <div class="card-effect hover-scale cursor-pointer" onclick="openModal('https://youke1.picui.cn/s1/2025/08/07/68941b1532d73.jpg')">
+                    <img src="https://youke1.picui.cn/s1/2025/08/07/68941b1532d73.jpg" alt="孙亨裕公式照7" title="公式照7.JPG" class="w-full h-full object-cover">
+                </div>
+                <div class="card-effect hover-scale cursor-pointer" onclick="openModal('https://youke1.picui.cn/s1/2025/08/07/68941b1437736.jpg')">
+                    <img src="https://youke1.picui.cn/s1/2025/08/07/68941b1437736.jpg" alt="孙亨裕公式照9" title="公式照9.JPG" class="w-full h-full object-cover">
+                </div>
+            </div>
+            
+            <!-- 图片来源标注 -->
+            <p class="text-xs text-gray-400 mt-8 text-center italic">사진 출처: mnetboysplanet | 图片来源: mnetboysplanet</p>
+        </div>
+    </section>
+
+    <!-- 官方视频 -->
+    <section id="videos" class="py-20 bg-white relative">
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="text-[clamp(1.5rem,5vw,3rem)] font-bold text-secondary mb-2">
+                    <span class="text-primary">#</span> 공식 영상
+                </h2>
+                <h3 class="text-[clamp(0.9rem,2vw,1.2rem)] text-gray-500">官方视频 | Official Videos</h3>
+                <div class="w-24 h-1 bg-primary mx-auto mt-4"></div>
+            </div>
+
+            <!-- 添加的内容：舞台上的神经病患者 · 舞台下的安静艺术家 -->
+            <div class="text-center mb-10">
+                <p class="text-[clamp(1rem,3vw,1.8rem)] font-bold text-secondary mb-2">
+                    "무대 뒷편에선 순둥이 · 무대 위에서는 미친이다"
+                </p>
+                <p class="text-[clamp(0.9rem,2vw,1.4rem)] text-gray-600">
+                    "舞台上的神经病患者 · 舞台下的安静艺术家"
+                </p>
+            </div>
+
+            <!-- 六个视频，移动端以两个为一行显示 -->
+            <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- 视频卡片 - NEVER等级评价舞台cut -->
+                <a href="https://youtu.be/bpBp7kNdTjU?si=xuoCz4xoqqTUvjLR" target="_blank" class="card-effect group">
+                    <div class="relative">
+                        <img src="https://img.youtube.com/vi/bpBp7kNdTjU/hqdefault.jpg" alt="NEVER等级评价舞台cut缩略图" class="w-full h-48 object-cover">
+                        <div class="absolute inset-0 bg-primary/20 group-hover:bg-primary/40 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
+                            <i class="fa fa-play-circle text-5xl text-white"></i>
+                        </div>
+                    </div>
+                    <div class="p-3">
+                        <h3 class="text-[clamp(0.8rem,3vw,1.2rem)] font-bold text-secondary mb-1">♬NEVER - 국민의 아들 @계급 결정전 | Mnet 250718 방송</h3>
+                        <p class="text-gray-600 text-xs">NEVER等级评价舞台cut</p>
+                    </div>
+                </a>
+
+                <!-- 视频卡片 - NEVER等级评价舞台纯享版 -->
+                <a href="https://youtu.be/yYnCBGCcLWY?si=P3XY7PehSqdqkym5" target="_blank" class="card-effect group">
+                    <div class="relative">
+                        <img src="https://img.youtube.com/vi/yYnCBGCcLWY/hqdefault.jpg" alt="NEVER等级评价舞台纯享版缩略图" class="w-full h-48 object-cover">
+                        <div class="absolute inset-0 bg-primary/20 group-hover:bg-primary/40 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
+                            <i class="fa fa-play-circle text-5xl text-white"></i>
+                        </div>
+                    </div>
+                    <div class="p-3">
+                        <h3 class="text-[clamp(0.8rem,3vw,1.2rem)] font-bold text-secondary mb-1">♬NEVER - 국민의 아들 @계급 결정전 | 풀직캠</h3>
+                        <p class="text-gray-600 text-xs">NEVER等级评价舞台纯享版</p>
+                    </div>
+                </a>
+
+                <!-- 视频卡片 - NEVER等级评价舞台练习室版 -->
+                <a href="https://youtu.be/QkPETcfye4s?si=ZrWLEbt8_tby8b4Z" target="_blank" class="card-effect group">
+                    <div class="relative">
+                        <img src="https://img.youtube.com/vi/QkPETcfye4s/hqdefault.jpg" alt="NEVER等级评价舞台练习室版缩略图" class="w-full h-48 object-cover">
+                        <div class="absolute inset-0 bg-primary/20 group-hover:bg-primary/40 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
+                            <i class="fa fa-play-circle text-5xl text-white"></i>
+                        </div>
+                    </div>
+                    <div class="p-3">
+                        <h3 class="text-[clamp(0.8rem,3vw,1.2rem)] font-bold text-secondary mb-1">♬NEVER - 국민의 아들 @계급 결정전 | 안무 영상</h3>
+                        <p class="text-gray-600 text-xs">NEVER等级评价舞台练习室版</p>
+                    </div>
+                </a>
+
+                <!-- 视频卡片 - 一公舞台Rising Sun个人直拍 -->
+                <a href="https://youtu.be/-ykCaAX8pwM?si=4NG8Dhb0u2F1UvLo" target="_blank" class="card-effect group">
+                    <div class="relative">
+                        <img src="https://img.youtube.com/vi/-ykCaAX8pwM/hqdefault.jpg" alt="一公舞台Rising Sun个人直拍缩略图" class="w-full h-48 object-cover">
+                        <div class="absolute inset-0 bg-primary/20 group-hover:bg-primary/40 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
+                            <i class="fa fa-play-circle text-5xl text-white"></i>
+                        </div>
+                    </div>
+                    <div class="p-3">
+                        <h3 class="text-[clamp(0.8rem,3vw,1.2rem)] font-bold text-secondary mb-1">♬Rising Sun (순수) - 동방신기 (TVXQ!) @1vs1 계급 배틀 | 개인 직캠</h3>
+                        <p class="text-gray-600 text-xs">一公舞台Rising Sun个人直拍</p>
+                    </div>
+                </a>
+
+                <!-- 视频卡片 - 主题曲HOLA SOLAR直拍 -->
+                <a href="https://youtu.be/UrggyWr6caA?si=LZ-SGhWzK_ursuAN" target="_blank" class="card-effect group">
+                    <div class="relative">
+                        <img src="https://img.youtube.com/vi/UrggyWr6caA/hqdefault.jpg" alt="主题曲HOLA SOLAR直拍缩略图" class="w-full h-48 object-cover">
+                        <div class="absolute inset-0 bg-primary/20 group-hover:bg-primary/40 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
+                            <i class="fa fa-play-circle text-5xl text-white"></i>
+                        </div>
+                    </div>
+                    <div class="p-3">
+                        <h3 class="text-[clamp(0.8rem,3vw,1.2rem)] font-bold text-secondary mb-1">시그널송 '올라(HOLA SOLAR)' 개인 무대 직캠</h3>
+                        <p class="text-gray-600 text-xs">主题曲HOLA SOLAR直拍</p>
+                    </div>
+                </a>
+
+                <!-- 视频卡片 - 更多视频 (放在最后一项) -->
+                <a href="https://youtube.com/playlist?list=PL146t7bXPRFhfxtT-YR7HHkORrAGFcsQk&si=WW4Yh5hUSMI0O16g" target="_blank" class="card-effect group">
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="https://youke1.picui.cn/s1/2025/08/07/68941bedbea53.jpg" alt="主题曲练习1" class="w-full h-full object-cover" style="object-position: top;">
+                        <div class="absolute inset-0 bg-primary/20 group-hover:bg-primary/40 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
+                            <i class="fa fa-play-circle text-5xl text-white"></i>
+                        </div>
+                    </div>
+                    <div class="p-3">
+                        <h3 class="text-[clamp(0.8rem,3vw,1.2rem)] font-bold text-secondary mb-1">♬다른 동영상 보기</h3>
+                        <p class="text-gray-600 text-xs">更多视频</p>
+                    </div>
+                </a>
+            </div>
+            
+            <!-- 视频来源标注 -->
+            <p class="text-xs text-gray-400 mt-8 text-center italic">동영상 출처: mnetboysplanet | 视频来源: mnetboysplanet</p>
+        </div>
+    </section>
+
+    <!-- 社交媒体 -->
+    <section id="social" class="py-20 bg-gray-50 relative">
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="text-[clamp(1.5rem,5vw,3rem)] font-bold text-secondary mb-2">
+                    <span class="text-primary">#</span> 커뮤니티
+                </h2>
+                <h3 class="text-[clamp(0.9rem,2vw,1.2rem)] text-gray-500">社交媒体 | Social Media</h3>
+                <div class="w-24 h-1 bg-primary mx-auto mt-4"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                <!-- Instagram -->
+                <a href="https://www.instagram.com/hyung_yu_01/" target="_blank" class="card-effect text-center p-6 hover:bg-primary hover:text-white transition-all duration-300">
+                    <div class="text-5xl mb-4 text-primary group-hover:text-white transition-colors">
+                        <i class="fa fa-instagram"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Instagram</h3>
+                    <p class="text-base font-medium mb-3">인스타그램</p>
+                    <p class="text-gray-600 group-hover:text-white/80 text-sm">@hyung_yu_01</p>
+                </a>
+
+                <!-- 抖音 -->
+                <a href="https://www.tiktok.com/@smlt_1o5shy" target="_blank" class="card-effect text-center p-6 hover:bg-primary hover:text-white transition-all duration-300">
+                    <div class="text-5xl mb-4 text-primary group-hover:text-white transition-colors">
+                        <i class="fa fa-music"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">抖音</h3>
+                    <p class="text-base font-medium mb-3">TikTok</p>
+                    <p class="text-gray-600 group-hover:text-white/80 text-sm">@smlt_1o5shy</p>
+                </a>
+
+                <!-- 小红书 -->
+                <a href="https://www.xiaohongshu.com/user/profile/6686b538000000000f034295?xsec_token=ABUnrEQxHCEQcnozdr7cpRauSziPVHn4Qbm2xhApD8Uw0%3D&xsec_source=pc_search" target="_blank" class="card-effect text-center p-6 hover:bg-primary hover:text-white transition-all duration-300">
+                    <div class="text-5xl mb-4 text-primary group-hover:text-white transition-colors">
+                        <i class="fa fa-book"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">小红书</h3>
+                    <p class="text-base font-medium mb-3">RedNote</p>
+                    <p class="text-gray-600 group-hover:text-white/80 text-sm">@孙亨裕</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 投票方式 -->
+    <section id="vote" class="py-20 bg-white relative">
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="text-[clamp(1.5rem,5vw,3rem)] font-bold text-secondary mb-2">
+                    <span class="text-primary">#</span> 투표 방법
+                </h2>
+                <h3 class="text-[clamp(0.9rem,2vw,1.2rem)] text-gray-500">投票方式 | Voting Method</h3>
+                <div class="w-24 h-1 bg-primary mx-auto mt-4"></div>
+            </div>
+
+            <div class="max-w-3xl mx-auto bg-primary/5 rounded-2xl p-6 border border-primary/20">
+                <div class="flex flex-col md:flex-row items-center gap-6">
+                    <div class="w-full md:w-1/3">
+                        <div class="bg-white rounded-xl shadow-lg p-4 text-center">
+                            <i class="fa fa-mobile text-5xl text-primary mb-3"></i>
+                            <h3 class="text-lg font-bold text-secondary">Mnet Plus 앱</h3>
+                            <p class="text-gray-600 text-sm">모바일 어플리케이션</p>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-2/3">
+                        <h3 class="text-xl font-bold text-secondary mb-3">엠넷플러스 앱을 통에 투표</h3>
+                        <p class="text-base text-gray-700 mb-4">
+                            1. 엠넷플러스 앱을 다운로드하고 설치 해주세요.<br>
+                            2. 엠넷플러스 계정으로 로그인 또는 회원가입 해주세요.<br>
+                            3. '보이즈 II 플래닛' 프로그램 페이지를 클릭하세요.<br>
+                            4. '쑨헝위/孙亨裕/SUN HENG YU'를 뽑아서 투표에 부쳐주시기 바랍니다.
+                        </p>
+                        <p class="text-base text-gray-700 mb-4">
+                            1. 下载并安装Mnet Plus应用<br>
+                            2. 登录Mnet Plus账号或注册新账号<br>
+                            3. 进入"BOYS II PLANET"节目页面<br>
+                            4. 选择"孙亨裕"并提交投票
+                        </p>
+                        <a href="https://apps.apple.com/kr/app/mnet-plus/id6443405421" target="_blank" class="inline-block bg-primary hover:bg-primary/90 text-white font-bold py-2 px-6 rounded-full text-sm shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
+                            <i class="fa fa-download mr-2"></i> 앱 다운로드
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-secondary text-white py-10">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-bold mb-2">U 쑨헝위 孙亨裕</h2>
+                <p class="text-gray-400 text-sm">I want U, I like U, I love U!</p>
+                <p class="text-gray-400 text-sm">We support U all the way!</p>
+            </div>
+            <div class="flex flex-wrap justify-center gap-x-6 gap-y-2 mb-6">
+                <a href="#profile" class="text-gray-400 hover:text-primary transition-colors text-sm">프로필</a>
+                <a href="#photos" class="text-gray-400 hover:text-primary transition-colors text-sm">사진</a>
+                <a href="#videos" class="text-gray-400 hover:text-primary transition-colors text-sm">동영상</a>
+                <a href="#social" class="text-gray-400 hover:text-primary transition-colors text-sm">커뮤니티</a>
+                <a href="#vote" class="text-gray-400 hover:text-primary transition-colors text-sm">투표</a>
+            </div>
+            <div class="text-center text-gray-500 text-xs">
+                <p>@sunhengyudebut@쑨헝위데뷔하자</p>
+                <p class="mt-2">© 2025 孙亨裕安利网站. 保留所有权利.</p>
+                <!-- 额外的来源标注 -->
+                <p class="mt-1">사진 동영상 출처: mnetboysplanet | 来源: mnetboysplanet</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 返回顶部按钮 -->
+    <button id="back-to-top" class="fixed bottom-24 right-8 bg-primary text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg opacity-0 invisible transition-all duration-300 z-50">
+        <i class="fa fa-chevron-up"></i>
+    </button>
+
+    <!-- 背景音乐 -->
+    <div class="hidden">
+        <!-- 截取视频的0:07-1:29部分 -->
+        <iframe id="bg-music" width="0" height="0" src="https://www.youtube.com/embed/yYnCBGCcLWY?autoplay=1&loop=1&playlist=yYnCBGCcLWY&start=7&end=89" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+
+    <!-- 音乐控制按钮 -->
+    <button id="music-control" class="fixed top-20 right-6 bg-primary/80 hover:bg-primary text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg z-50 transition-all duration-300">
+        <i class="fa fa-volume-up"></i>
+    </button>
+
+    <script>
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检查是否为移动设备
+            const isMobile = window.innerWidth < 768;
+            
+            // 如果是移动设备，3秒后淡入元素
+            if (isMobile) {
+                setTimeout(function() {
+                    document.getElementById('hero-overlay').classList.add('visible');
+                    document.getElementById('hero-content').classList.add('visible');
+                    document.getElementById('hero-arrow').classList.add('visible');
+                    document.getElementById('navbar-title').classList.add('visible');
+                }, 3000); // 3秒延迟
+            } else {
+                // 桌面设备立即显示
+                document.getElementById('hero-overlay').classList.add('visible');
+                document.getElementById('hero-content').classList.add('visible');
+                document.getElementById('hero-arrow').classList.add('visible');
+                document.getElementById('navbar-title').classList.add('visible');
+            }
+            
+            // 导航栏滚动效果
+            const navbar = document.getElementById('navbar');
+            const backToTop = document.getElementById('back-to-top');
+            
+            // 页面区域引用
+            const sections = {
+                hero: document.getElementById('hero-section'),
+                profile: document.getElementById('profile'),
+                photos: document.getElementById('photos'),
+                videos: document.getElementById('videos'),
+                social: document.getElementById('social'),
+                vote: document.getElementById('vote')
+            };
+
+            // 移动端菜单切换
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // 图片模态框功能
+            const modal = document.getElementById('image-modal');
+            const modalImage = document.getElementById('modal-image');
+            
+            window.openModal = function(imageUrl) {
+                modalImage.src = imageUrl;
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+            
+            window.closeModal = function() {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+            
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+            
+            // 滚动效果
+            window.addEventListener('scroll', () => {
+                // 导航栏背景变化
+                if (window.scrollY > 50) {
+                    navbar.classList.add('bg-secondary', 'bg-opacity-95', 'shadow-lg');
+                    navbar.classList.remove('bg-transparent');
+                } else {
+                    navbar.classList.remove('bg-secondary', 'bg-opacity-95', 'shadow-lg');
+                    navbar.classList.add('bg-transparent');
+                }
+                
+                // 返回顶部按钮显示/隐藏
+                if (window.scrollY > 300) {
+                    backToTop.classList.remove('opacity-0', 'invisible');
+                    backToTop.classList.add('opacity-100', 'visible');
+                } else {
+                    backToTop.classList.add('opacity-0', 'invisible');
+                    backToTop.classList.remove('opacity-100', 'visible');
+                }
+            });
+            
+            // 返回顶部功能
+            backToTop.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+            
+            // 平滑滚动到锚点
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    
+                    // 关闭移动端菜单（如果打开）
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // 音乐控制
+            const musicControl = document.getElementById('music-control');
+            const bgMusic = document.getElementById('bg-music');
+            let isPlaying = true;
+            
+            musicControl.addEventListener('click', () => {
+                isPlaying = !isPlaying;
+                
+                if (isPlaying) {
+                    bgMusic.src = bgMusic.src.replace('autoplay=0', 'autoplay=1');
+                    musicControl.innerHTML = '<i class="fa fa-volume-up"></i>';
+                } else {
+                    bgMusic.src = bgMusic.src.replace('autoplay=1', 'autoplay=0');
+                    musicControl.innerHTML = '<i class="fa fa-volume-off"></i>';
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
